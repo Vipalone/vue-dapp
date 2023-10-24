@@ -4,12 +4,15 @@ import { shortenAddress } from '@vue-dapp/core'
 import copy from 'copy-to-clipboard'
 import { useDappStore } from '@/stores/useDappStore'
 
-const { open } = useBoard()
 const { address, isActivated } = useEthers()
 const { disconnect, wallet } = useWallet()
 
 const dappStore = useDappStore()
 const { isNetworkUnmatched } = storeToRefs(dappStore)
+
+function onClickConnect() {
+	dappStore.vuedapp.openBoard()
+}
 
 async function onSwitchChain() {
 	try {
@@ -50,7 +53,12 @@ async function onSwitchChain() {
 			</div>
 		</div>
 
-		<BaseButton class="rounded-3xl w-auto" v-else @click="open()" :disabled="wallet.status === 'connecting'">
+		<BaseButton
+			class="rounded-3xl w-auto"
+			v-else
+			@click="onClickConnect"
+			:disabled="wallet.status === 'connecting'"
+		>
 			{{ wallet.status === 'connecting' ? 'Connecting...' : wallet.status === 'loading' ? 'Loading...' : '' }}
 			<Icon name="i-octicon-plug-24" v-if="wallet.status !== 'connecting' && wallet.status !== 'loading'" />
 		</BaseButton>

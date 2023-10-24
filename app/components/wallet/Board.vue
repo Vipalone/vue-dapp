@@ -40,7 +40,8 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { boardOpen, close } = useBoard()
+		const dappStore = useDappStore()
+
 		const { connectWith, wallet, autoConnect } = useWallet()
 
 		const walletItemClass = computed(() => (props.dark ? 'wallet-item--dark' : 'wallet-item'))
@@ -66,7 +67,7 @@ export default defineComponent({
 
 		const onClickWallet = async (connector: Connector) => {
 			try {
-				close()
+				dappStore.vuedapp.closeBoard()
 				await connectWith(connector, connectTimeout)
 			} catch (err: any) {
 				props.connectErrorHandler && props.connectErrorHandler(err)
@@ -75,20 +76,19 @@ export default defineComponent({
 
 		return {
 			isAutoConnecting,
-			boardOpen,
+			dappStore,
 			wallet,
 			connectors,
 			walletItemClass,
 			onClickWallet,
-			close,
 		}
 	},
 })
 </script>
 
 <template>
-	<Modal :modalOpen="boardOpen" @close="close" :dark="dark">
-		<div v-click-outside="close">
+	<Modal :modalOpen="dappStore.vuedapp.boardOpen" @close="dappStore.vuedapp.closeBoard" :dark="dark">
+		<div v-click-outside="dappStore.vuedapp.closeBoard">
 			<div v-for="(connector, i) in connectors" :key="connector.name">
 				<div :class="walletItemClass" @click="onClickWallet(connector)">
 					<div class="item">

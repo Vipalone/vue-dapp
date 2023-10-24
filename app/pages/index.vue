@@ -30,6 +30,8 @@ async function onSignSIWEMessage() {
 		<BaseButton @click="onSignSIWEMessage">Sign SIWE Message</BaseButton>
 
 		<p class="w-full break-words">{{ siweMessage }}</p>
+
+		<NuxtLink to="/dev">/dev</NuxtLink>
 	</div>
 </template>
 
